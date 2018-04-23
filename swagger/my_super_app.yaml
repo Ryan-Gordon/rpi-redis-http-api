@@ -1,0 +1,44 @@
+swagger: "2.0"
+
+info:
+  title: "Redis High Scores Leaderboard"
+  version: "1.0"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# Added by API Auto Mocking Plugin
+
+basePath: /v1.0
+
+
+schemes:
+ - https
+ - http
+# tags are used for organizing operations
+tags:
+- name: public
+  description: Operations available to regular developers
+- name: admins
+  description: Secured Admin-only calls
+
+
+
+
+paths:
+  /todays-champion/:
+    get:
+      operationId: api.scores.getTodaysCurrentChampion
+      responses:
+        '200':
+          description: 'The top user and their score'
+  /today-leaderboard/:
+    get:
+      operationId: api.scores.getLeaderboard
+      responses:
+        '200':
+          description: 'List of high scorers'
+
+        
+  
+  

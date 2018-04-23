@@ -1,0 +1,5 @@
+Flask
+connexion
+Flask-Injector
+injector==0.12.0
+redis
