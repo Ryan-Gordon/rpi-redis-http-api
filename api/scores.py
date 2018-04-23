@@ -11,3 +11,8 @@ def getLeaderboard(data_provider) -> str:
 @inject(data_provider=RedisProvider)
 def getTodaysCurrentChampion(data_provider) -> str:
     return data_provider.getTodaysCurrentChampion()
+
+
+@inject(data_provider=RedisProvider)
+def setPlayerScore(data_provider, productPayload) -> str:
+    return data_provider.setPlayerScore(productPayload)

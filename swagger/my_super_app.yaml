@@ -26,6 +26,7 @@ tags:
 
 
 paths:
+  
   /todays-champion/:
     get:
       operationId: api.scores.getTodaysCurrentChampion
@@ -39,6 +40,32 @@ paths:
         '200':
           description: 'List of high scorers'
 
-        
+  /logscore/:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: productPayload
+        description: Device ID and score 
+        schema:
+          $ref: '#/definitions/Score'
+      operationId: api.scores.setPlayerScore
+      responses:
+        201:
+          description: Successfully added product to the DB
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+
+definitions:
+  Score:
+    type: object
+    properties:
+      userid: { type: string }
+      score: { type: string }
   
   

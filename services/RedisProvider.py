@@ -48,3 +48,16 @@ class RedisProvider(object):
         #Return
 
         return "Todays champion is : \n User : "+str(score[0].decode("utf-8"))+ " with Score : "+str(score[1]), 200
+
+    def setPlayerScore(self, productPayload) -> str:
+        print(productPayload)
+        print(productPayload['userid'])
+        print(productPayload['score'])
+        #Connect to redis
+        pool = redis.ConnectionPool(host='192.168.1.8', port=6379, db=0)
+        r = redis.Redis(connection_pool=pool)
+
+
+        r.zadd('score.quizscore:'+datetime.datetime.today().strftime('%Y-%m-%d'), productPayload['userid'],productPayload['score'] )
+
+        return "Success", 200
