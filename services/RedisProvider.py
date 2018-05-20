@@ -19,22 +19,14 @@ class RedisProvider(object):
         
         # Run zrevrange from docs zrevrange(name, start, end, withscores=False, score_cast_func=<type 'float'>)
         raw_results = r.zrevrange(str('score.quizscore:'+datetime.datetime.today().strftime('%Y-%m-%d')) , 0, 5, withscores=True) 
-        print(raw_results)
-
+        #Format results
         for score in raw_results:
-            print(score)
-            print("\n\n Score before:"+score[0].decode("utf-8"))
-            print("\n\n User : "+score[0].decode("utf-8")+ " with Score : "+str(score[1]) )
-
             self.formatted_results.append([score[0].decode("utf-8"), score[1]])
-       #Format results 
-
-       #Return
+        
 
         return json.dumps(self.formatted_results), 200
 
     def getTodaysCurrentChampion(self) -> str:
-
         #Connect to redis
         pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=6379, db=0)
         r = redis.Redis(connection_pool=pool)
@@ -42,11 +34,8 @@ class RedisProvider(object):
         # Run zrevrange from docs zrevrange(name, start, end, withscores=False, score_cast_func=<type 'float'>)
         results = r.zrevrange(str('score.quizscore:'+datetime.datetime.today().strftime('%Y-%m-%d')) , 0, 5, withscores=True) 
         
-       
         #Format results - Take winning player (first tuple) 
         score = results[0]
-        #Return
-
         return "Todays champion is : \n User : "+str(score[0].decode("utf-8"))+ " with Score : "+str(score[1]), 200
 
     def setPlayerScore(self, productPayload) -> str:
