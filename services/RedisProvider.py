@@ -14,7 +14,7 @@ class RedisProvider(object):
     def getLeaderboard(self) -> str:
         self.formatted_results = []
         #Connect to redis
-        pool = redis.ConnectionPool(host='192.168.1.8', port=6379, db=0)
+        pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=6379, db=0)
         r = redis.Redis(connection_pool=pool)
         
         # Run zrevrange from docs zrevrange(name, start, end, withscores=False, score_cast_func=<type 'float'>)
@@ -36,7 +36,7 @@ class RedisProvider(object):
     def getTodaysCurrentChampion(self) -> str:
 
         #Connect to redis
-        pool = redis.ConnectionPool(host='192.168.1.8', port=6379, db=0)
+        pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=6379, db=0)
         r = redis.Redis(connection_pool=pool)
         
         # Run zrevrange from docs zrevrange(name, start, end, withscores=False, score_cast_func=<type 'float'>)
@@ -50,14 +50,11 @@ class RedisProvider(object):
         return "Todays champion is : \n User : "+str(score[0].decode("utf-8"))+ " with Score : "+str(score[1]), 200
 
     def setPlayerScore(self, productPayload) -> str:
-        print(productPayload)
-        print(productPayload['userid'])
-        print(productPayload['score'])
         #Connect to redis
-        pool = redis.ConnectionPool(host='192.168.1.8', port=6379, db=0)
+        pool = redis.ConnectionPool(host=os.environ['REDIS_SERVER'], port=6379, db=0)
         r = redis.Redis(connection_pool=pool)
 
+        r.zadd('score.quizscore:'+datetime.datetime.today().strftime('%Y-%m-%d'),productPayload['score'], productPayload['userid'] )
+        r.zadd('score.quizscore', productPayload['score'],productPayload['userid'] )
 
-        r.zadd('score.quizscore:'+datetime.datetime.today().strftime('%Y-%m-%d'), productPayload['userid'],productPayload['score'] )
-
-        return "Success", 200
+        return "Success", 201
